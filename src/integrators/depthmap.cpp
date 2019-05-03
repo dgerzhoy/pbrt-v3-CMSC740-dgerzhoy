@@ -93,9 +93,9 @@ namespace pbrt {
         Point3f pMin = scene.WorldBound().pMin;
         //Float maxDistance = Distance(pMin, pMax);
         //Float maxDistance = 100.f;
-        Float maxDistance = maxDist(ray,scene);
+        Float maxDistance = log(maxDist(ray,scene));
 
-		float dist = ray.tMax;
+		float dist = log(ray.tMax);
         float ratio = 1.f - dist / maxDistance;
 		L = White * ratio;
 
