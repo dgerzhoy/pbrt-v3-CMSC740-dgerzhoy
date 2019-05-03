@@ -426,6 +426,7 @@ class AnimatedTransform {
     }
     Bounds3f MotionBounds(const Bounds3f &b) const;
     Bounds3f BoundPointMotion(const Point3f &p) const;
+    Point3f origin() const;
 
   private:
     // AnimatedTransform Private Data

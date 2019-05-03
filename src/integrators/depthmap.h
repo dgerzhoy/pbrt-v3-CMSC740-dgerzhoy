@@ -58,7 +58,7 @@ namespace pbrt {
 		Spectrum Li(const RayDifferential &ray, const Scene &scene,
 			Sampler &sampler, MemoryArena &arena, int depth) const;
 		void Preprocess(const Scene &scene, Sampler &sampler);
-        float maxDist(const Ray ray, const Scene scene) const;
+        float maxDist(Point3f o, const Scene scene) const;
 
 	private:
 		// DepthMapIntegrator Private Data

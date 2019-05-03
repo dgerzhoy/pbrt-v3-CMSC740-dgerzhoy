@@ -41,11 +41,10 @@
 
 namespace pbrt {
 
-    float DepthMapIntegrator::maxDist(const Ray ray, const Scene scene) const
+    float DepthMapIntegrator::maxDist(Point3f o, const Scene scene) const
 	{
         Point3f pMax = scene.WorldBound().pMax;
         Point3f pMin = scene.WorldBound().pMin;
-		Point3f o = ray.o;
 
 		Point3f max;
 		for (int i = 0; i < 3; i++)
@@ -63,6 +62,7 @@ namespace pbrt {
         return Distance(o, max);
 	}
 
+    #pragma optimize("", off)
 	// DepthMapIntegrator Method Definitions
 	void DepthMapIntegrator::Preprocess(const Scene &scene,
 		Sampler &sampler) {
@@ -72,6 +72,10 @@ namespace pbrt {
         //maxDistance = Distance(pMin, pMax);
         //printf("pMin %f %f %f | pMax %f %f %f\n", pMin.x, pMin.y, pMin.z,
         //       pMax.x, pMax.y, pMax.z);
+//camera->CameraToWorld;
+          Point3f o = camera->CameraToWorld.origin();
+          maxDistance = maxDist(o, scene);
+
 	}
 	Spectrum DepthMapIntegrator::Li(const RayDifferential &ray,
 		const Scene &scene, Sampler &sampler,
@@ -89,18 +93,18 @@ namespace pbrt {
 			return L;
 		}
 		
-		Point3f pMax = scene.WorldBound().pMax;
-        Point3f pMin = scene.WorldBound().pMin;
-        //Float maxDistance = Distance(pMin, pMax);
-        //Float maxDistance = 100.f;
-        Float maxDistance = log(maxDist(ray,scene));
-
-		float dist = log(ray.tMax);
-        float ratio = 1.f - dist / maxDistance;
+        float dist = ray.tMax;
+        
+        //maxDistance = std::log10f(maxDistance);
+        //dist = std::log10f(dist);
+        float ratio = dist / maxDistance;
+        //ratio = std::log(ratio);
+        ratio = 1.f - ratio;
 		L = White * ratio;
 
 		return L;
 	}
+    #pragma optimize("", on)
 
 	DepthMapIntegrator *CreateDepthMapIntegrator(
 		const ParamSet &params, std::shared_ptr<Sampler> sampler,

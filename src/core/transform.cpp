@@ -1192,6 +1192,15 @@ RayDifferential AnimatedTransform::operator()(const RayDifferential &r) const {
     }
 }
 
+Point3f AnimatedTransform::origin() const
+{
+    Transform t = *startTransform;
+    Matrix4x4 M = t.GetMatrix();
+    Point3f o(M.m[0][3], M.m[1][3], M.m[2][3]);
+
+    return o;
+}
+
 Point3f AnimatedTransform::operator()(Float time, const Point3f &p) const {
     if (!actuallyAnimated || time <= startTime)
         return (*startTransform)(p);
