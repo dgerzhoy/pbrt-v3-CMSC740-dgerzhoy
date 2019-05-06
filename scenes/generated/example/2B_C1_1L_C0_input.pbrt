@@ -1,0 +1,62 @@
+   Film "image" 
+        "integer xresolution" [ 256 ]
+        "integer yresolution" [ 256 ] 
+        "string filename" [ "generated.png" ] 
+PixelFilter "box" 
+LookAt 	0 0.25 0.25 
+        0 0 0
+        0 1 0
+Scale -1 1 1
+Camera "perspective" 
+        "float fov" [ 90 ] 
+
+Sampler "halton"
+        "integer pixelsamples" [ 4 ] 
+Integrator "directlighting"
+#############################################
+WorldBegin
+
+#floor 
+AttributeBegin 
+    Material "matte" 
+        "rgb Kd" [ 0.40000001 0.41999999 0.47999999 ] 
+    Shape "trianglemesh" "point P" [ -1 0 -1 1 0 -1 1 0 1 -1 0 1 ] 
+	"integer indices" [ 0 1 2 2 3 0] 
+AttributeEnd 
+
+#spotlight 
+AttributeBegin 
+CoordSysTransform "camera" 
+LightSource "point" "color I" [ .01 .01 .01 ] 
+AttributeEnd
+
+#Ball 0
+
+AttributeBegin
+	Material "matte"
+	"rgb Kd" [ 0 1 0 ]
+  Translate -0.1 0.1 0.05000000000000002
+  Shape "sphere" "float radius " 0.0125
+AttributeEnd
+
+#Ball 1
+
+AttributeBegin
+	Material "matte"
+	"rgb Kd" [ 0 1 0 ]
+  Translate -0.1 0.15000000000000002 -0.1
+  Shape "sphere" "float radius " 0.0125
+AttributeEnd
+
+#Light 0
+
+AttributeBegin
+    AreaLightSource "diffuse"
+    "integer nsamples" [1 ] 
+    "color L" [128 128 128]
+    Material "matte"  "color Kd"  [0.000000 0.000000 0.000000]
+    Translate -0.1 0.5 -0.15000000000000002
+    Shape "sphere" "float radius " 0.025
+AttributeEnd
+
+WorldEnd

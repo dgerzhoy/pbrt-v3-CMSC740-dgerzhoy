@@ -6,7 +6,29 @@ import itertools as it
 import argparse
 import random as rand
 
-def addLight(lines,l,p,s=0.025,samps=1,power=128):
+def sharedPreamble(
+        base_lines,
+        eye=(0,0.25,0.25),
+        lookat=(0,0,0),
+        up=(0,1,0),
+        scale=(-1,1,1),
+        fov=90):
+    base_lines.append('   Film "image" \n')
+    base_lines.append('        "integer xresolution" [ 256 ]\n')
+    base_lines.append('        "integer yresolution" [ 256 ] \n')
+    base_lines.append('        "string filename" [ "generated.png" ] \n')
+    base_lines.append('PixelFilter "box" \n')
+    base_lines.append('LookAt 	{} {} {} \n'.format(*eye))
+    base_lines.append('        {} {} {}\n'.format(*lookat))
+    base_lines.append('        {} {} {}\n'.format(*up))
+    base_lines.append('Scale {} {} {}\n'.format(*scale))
+    base_lines.append('Camera "perspective" \n')
+    base_lines.append('        "float fov" [ {} ] \n\n'.format(fov))
+
+    base_lines.append('Sampler "halton"\n')
+
+
+def addLight(lines,l,p,r=0.025,samps=1,power=128):
     lines.append("#Light {}\n".format(l))
     lines.append("\nAttributeBegin\n")
     lines.append("    AreaLightSource \"diffuse\"\n")
@@ -14,7 +36,7 @@ def addLight(lines,l,p,s=0.025,samps=1,power=128):
     lines.append("    \"color L\" [{} {} {}]\n".format(power,power,power))
     lines.append("    Material \"matte\"  \"color Kd\"  [0.000000 0.000000 0.000000]\n")
     lines.append("    Translate {} {} {}\n".format(*p))
-    lines.append("    Shape \"sphere\" \"float radius \" {}\n".format(s))
+    lines.append("    Shape \"sphere\" \"float radius \" {}\n".format(r))
     lines.append("AttributeEnd\n\n")
 
 def addBall(lines,b,p,s,color=(0,1,0)):
@@ -56,7 +78,6 @@ AttributeEnd\n\n")
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument("basefile",help="base file")
 parser.add_argument("outpath",help="path for generated scene files")
 parser.add_argument('-r',"--random_seed",help="Seed for random number generator",type=int, default=1)
 parser.add_argument('-nB',"--nBalls",nargs='+',help="Number of Balls (list)",type=int, default=[3])
@@ -75,16 +96,14 @@ parser.add_argument('-LZ',"--Light_Z_Range",nargs=3,help="Z range for lights (st
 #parser.add_argument("--Light_Sizes",nargs='+',help="Sizes for lights s1 s2 s3...",type=float, default=(.025, .05, .1))
 args = parser.parse_args()
 
-basefile = args.basefile
 outpath = args.outpath
 outlistfile = outpath+"list.txt"
 
 if not os.path.exists(outpath):
     os.mkdir(outpath)
 
-f = open(basefile,"r")
-base_lines = f.readlines()
-f.close()
+base_lines = list()
+sharedPreamble(base_lines)
 
 seed = args.random_seed
 rand.seed(seed)
@@ -114,8 +133,6 @@ nBA = args.nBall_Arrangements
 
 nLights_List = args.nLights
 nLA = args.nLight_Arrangements
-
-lines = list(base_lines)
 
 depthmap_samples = 32
 depth_lines = list()
@@ -163,8 +180,6 @@ for nBalls in nBalls_List:
         fo.write("WorldEnd\n")
         fo.close()
      
-    #For the same ball config you have different light configs
-    #For the same light config you have different ball_configs
     #Now create the Area light configs for each ball config
     for ball_config in BallConfigs:
         for nLights in nLights_List:
@@ -173,12 +188,21 @@ for nBalls in nBalls_List:
             for a in range(nLA):
                 rand.seed(seed)
                 light_config = list()
+                coord_file = "{}L_C{}.txt".format(nLights,a)
+                fo = open(outpath+coord_file,"w")
+
                 for l in range(nLights):
                     p = rand.choice(LP)
-                    addLight(light_config,l,p)
-
+                    r = .025
+                    power = 128
+                    addLight(light_config,l,p,r=r,power=power)
+                    #               x  y  z  r  p
+                    light_coords = "{} {} {} {} {}\n".format(*p,r,power)
+                    fo.write(light_coords)
                 LightConfigs.append(light_config)
-    
+
+                fo.close()
+
             for (b,ball_config) in enumerate(BallConfigs):
                 for (l,light_config) in enumerate(LightConfigs):
                     #create pbrt file for ground truth
@@ -194,6 +218,7 @@ for nBalls in nBalls_List:
                     fo.close()
                     fileList.append(file_name+"\n")
 
+                    #create pbrt file for input image
                     file_name = "{}B_C{}_{}L_C{}_input".format(nBalls,b,nLights,l)
                     fo = open(outpath+file_name+".pbrt","w")
                     fo.writelines(base_lines)
