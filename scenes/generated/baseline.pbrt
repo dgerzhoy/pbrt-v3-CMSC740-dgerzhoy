@@ -1,0 +1,13 @@
+Film "image" 
+        "integer xresolution" [ 256] 
+        "integer yresolution" [ 256 ] 
+        "string filename" [ "generated.png" ] 
+PixelFilter "box" 
+LookAt 	0 .25 .25 
+        0 0 0
+        0 1 0
+Scale -1 1 1
+Camera "perspective" 
+        "float fov" [ 90 ] 
+
+Sampler "halton"
