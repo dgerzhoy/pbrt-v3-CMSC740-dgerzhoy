@@ -33,6 +33,11 @@ example in the scene directory generated with command (on Windows from scenes\ge
 		This means you generate scenes with 2 balls and 3 balls (-nB 2 3) with 2 arrangements each (-nBA)
 		with 1 light and 2 lights (-nL 1 2) with 2 arrangements each (-nLA)
 
+to rotate around x axis (for background shadows) add -rot 90 1 0 0
+	python ..\..\generator\sceneGenerator\sceneGenerator.py .\example\ -nB 2 3 -nBA 2 -nL 1 2 -nLA 2 -rot 90 1 0 0 
+
+you can change the random seed with -r <seed>
+
 RUN SCRIPT:
 	
 usage: sceneRunner.py [-h] pbrt path

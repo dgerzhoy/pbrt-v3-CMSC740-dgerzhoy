@@ -12,6 +12,7 @@ def sharedPreamble(
         lookat=(0,0,0),
         up=(0,1,0),
         scale=(-1,1,1),
+        rotate=None,
         fov=90):
     base_lines.append('   Film "image" \n')
     base_lines.append('        "integer xresolution" [ 256 ]\n')
@@ -22,10 +23,13 @@ def sharedPreamble(
     base_lines.append('        {} {} {}\n'.format(*lookat))
     base_lines.append('        {} {} {}\n'.format(*up))
     base_lines.append('Scale {} {} {}\n'.format(*scale))
+    if rotate:
+        base_lines.append("Rotate {} {} {} {}\n".format(*rotate))
     base_lines.append('Camera "perspective" \n')
     base_lines.append('        "float fov" [ {} ] \n\n'.format(fov))
 
     base_lines.append('Sampler "halton"\n')
+
 
 
 def addLight(lines,l,p,r=0.025,samps=1,power=128):
@@ -39,14 +43,65 @@ def addLight(lines,l,p,r=0.025,samps=1,power=128):
     lines.append("    Shape \"sphere\" \"float radius \" {}\n".format(r))
     lines.append("AttributeEnd\n\n")
 
-def addBall(lines,b,p,s,color=(0,1,0)):
-    print("Ball {} has coordinate {}  and size {}".format(b,p,s))
+def textureDots(u,v,inside,outside,material='matte'):
+    texture = list()
+    texture.append('Texture "text" "spectrum" "dots"\n')
+    texture.append('		"float uscale" [{}] "float vscale" [{}]\n'.format(u,v))
+    texture.append('	   "rgb inside" [{} {} {}] "rgb outside" [{} {} {}]\n'.format(*inside,*outside))
+    texture.append('Material "{}"\n'.format(material))
+    texture.append('"texture Kd" "text"\n')
+    return texture
+
+def textureChecks(u,v,tex1,tex2,material='matte'):
+    texture = list()
+    texture.append('Texture "text" "spectrum" "checkerboard"\n')
+    texture.append('		"float uscale" [{}] "float vscale" [{}]\n'.format(u,v))
+    texture.append('	   "rgb tex1" [{} {} {}] "rgb tex2" [{} {} {}]\n'.format(*tex1,*tex2))
+    texture.append('Material "{}"\n'.format(material))
+    texture.append('"texture Kd" "text"\n')
+    return texture
+
+#uv/color2 ignored for the interface
+def textureColor(u,v,color,color2,material='matte'):
+    texture = list()
+    texture.append("	Material \"{}\"\n".format(material))
+    texture.append("	\"rgb Kd\" [ {} {} {} ]\n".format(*color))
+    return texture
+
+def texture(color1=None,color2=None):
+    if not color1:
+        color1 = ( rand.random(), rand.random(), rand.random() )
+    if not color2:
+        color2 = ( rand.random(), rand.random(), rand.random() )
+    material = rand.choice(['matte','plastic'])
+    textFunc = rand.choice([textureDots,textureChecks,textureColor])
+    uv = rand.choice([4,8,16,32,64])
+    return textFunc(uv,uv,color1,color2,material)
+
+def addBall(lines,b,p,s,texture):
+    #print("Ball {} has coordinate {}  and size {}".format(b,p,s))
     lines.append("#Ball {}\n".format(b))
     lines.append("\nAttributeBegin\n")
-    lines.append("	Material \"matte\"\n")
-    lines.append("	\"rgb Kd\" [ {} {} {} ]\n".format(*color))
+    [lines.append(t) for t in texture]
     lines.append("  Translate {} {} {}\n".format(*p))
     lines.append("  Shape \"sphere\" \"float radius \" {}\n".format(s))
+    lines.append("AttributeEnd\n\n")
+
+def addCube(lines,c,p,s,texture):
+    lines.append("#Cube {}\n".format(b))
+    lines.append("\nAttributeBegin\n")
+    [lines.append(t) for t in texture]
+    lines.append("  Translate {} {} {}\n".format(*p))
+    lines.append("  Shape \"trianglemesh\" \"point P\" [\n")
+    lines.append("  {} -{} {}\n".format(s,s,s))
+    lines.append("  {} -{} -{}\n".format(s,s,s))
+    lines.append("  {} {} -{}\n".format(s,s,s))
+    lines.append("  {} {} {}\n".format(s,s,s))
+    lines.append("  -{} -{} {}\n".format(s,s,s))
+    lines.append("  -{} -{} -{}\n".format(s,s,s))
+    lines.append("  -{} {} -{}\n".format(s,s,s))
+    lines.append("  -{} {} {} ]\n".format(s,s,s))
+    lines.append('            	"integer indices" [ 4 0 3 4 3 7 0 1 2 0 2 3 1 5 6 1 6 2 5 4 7 5 7 6 7 3 2 7 2 6 0 5 1 0 4 5]\n')
     lines.append("AttributeEnd\n\n")
 
 def depthPreamble(d_lines):
@@ -89,11 +144,13 @@ parser.add_argument('-d',"--down_samples",help="Sample Rate for input",type=int,
 parser.add_argument('-X',"--X_Range",nargs=3,help="X range (start stop step)",type=float, default=(-.1, .1, .05))
 parser.add_argument('-Y',"--Y_Range",nargs=3,help="Y range (start stop step)",type=float, default=(.05, .2, .05))
 parser.add_argument('-Z',"--Z_Range",nargs=3,help="Z range (start stop step)",type=float, default=(-.1, .1, .05))
-parser.add_argument('-S',"--Sizes",nargs='+',help="Sizes s1 s2 s3...",type=float, default=(.00625, .0125, .025))
+parser.add_argument('-S',"--Sizes",nargs='+',help="Sizes s1 s2 s3...",type=float, default=(.00625, .0125, .025, .05))
 parser.add_argument('-LX',"--Light_X_Range",nargs=3,help="X range for lights (start stop step)",type=float, default=(-.1, .1, .05))
 parser.add_argument('-LY',"--Light_Y_Range",nargs=3,help="Y range for lights (start stop step)",type=float, default=(.3, .6, .1))
 parser.add_argument('-LZ',"--Light_Z_Range",nargs=3,help="Z range for lights (start stop step)",type=float, default=(-.2, .2, .05))
 #parser.add_argument("--Light_Sizes",nargs='+',help="Sizes for lights s1 s2 s3...",type=float, default=(.025, .05, .1))
+parser.add_argument('-Sh',"--Shape",help="Shape mode: Ball Cube Both", default="both")
+parser.add_argument('-rot',"--rotate",nargs=4,help="angle x-axis y-axis z-axis (in degrees 1/0 1/0 1/0", default=(360,1,0,0))
 args = parser.parse_args()
 
 outpath = args.outpath
@@ -103,7 +160,7 @@ if not os.path.exists(outpath):
     os.mkdir(outpath)
 
 base_lines = list()
-sharedPreamble(base_lines)
+sharedPreamble(base_lines,rotate=args.rotate)
 
 seed = args.random_seed
 rand.seed(seed)
@@ -148,6 +205,14 @@ down_samples = args.down_samples
 up_line = "        \"integer pixelsamples\" [ {} ] \n".format(up_samples)
 down_line = "        \"integer pixelsamples\" [ {} ] \n".format(down_samples)
 
+shape_mode = args.Shape
+if(shape_mode != 'ball' and shape_mode != 'cube' and shape_mode != 'both'):
+    print("Shape mode incorrect\n")
+    parser.print_usage()
+    exit(-1)
+
+textures = ["checkerboard","dots"]
+
 fileList = list()
 #For number of balls in scene
 for nBalls in nBalls_List:
@@ -164,8 +229,15 @@ for nBalls in nBalls_List:
             p = P.pop()
             s = rand.choice(S)
             #Balls.append((p,s))
-            addBall(config,b,p,s)
-
+            #addBall(config,b,p,s)
+            text = texture()
+            if shape_mode == 'ball':
+                addBall(config,b,p,s,text)
+            elif shape_mode == 'cube':
+                addCube(config,b,p,s,text)
+            else:
+                Shape = rand.choice([addBall,addCube])
+                Shape(config,b,p,s,text)
         BallConfigs.append(config)
 
     #Now that I have a config saved, create depth map scenes each
