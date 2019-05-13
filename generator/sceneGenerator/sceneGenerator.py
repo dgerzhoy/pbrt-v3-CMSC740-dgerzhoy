@@ -189,7 +189,7 @@ parser.add_argument('-d',"--down_samples",help="Sample Rate for input",type=int,
 parser.add_argument('-X',"--X_Range",nargs=3,help="X range (start stop step)",type=float, default=(-.1, .1, .05))
 parser.add_argument('-Y',"--Y_Range",nargs=3,help="Y range (start stop step)",type=float, default=(.05, .2, .05))
 parser.add_argument('-Z',"--Z_Range",nargs=3,help="Z range (start stop step)",type=float, default=(-.1, .1, .05))
-parser.add_argument('-S',"--Sizes",nargs='+',help="Sizes s1 s2 s3...",type=float, default=(.00625, .0125, .025, .05))
+parser.add_argument('-S',"--Sizes",nargs='+',help="Sizes s1 s2 s3...",type=float, default=(.00625, .0125, .025, .05, .1))
 parser.add_argument('-LX',"--Light_X_Range",nargs=3,help="X range for lights (start stop step)",type=float, default=(-.1, .1, .05))
 parser.add_argument('-LY',"--Light_Y_Range",nargs=3,help="Y range for lights (start stop step)",type=float, default=(.3, .6, .1))
 parser.add_argument('-LZ',"--Light_Z_Range",nargs=3,help="Z range for lights (start stop step)",type=float, default=(-.2, .2, .05))
