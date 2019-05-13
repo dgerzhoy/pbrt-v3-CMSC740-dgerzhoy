@@ -43,40 +43,86 @@ def addLight(lines,l,p,r=0.025,samps=1,power=128):
     lines.append("    Shape \"sphere\" \"float radius \" {}\n".format(r))
     lines.append("AttributeEnd\n\n")
 
-def textureDots(u,v,inside,outside,material='matte'):
-    texture = list()
-    texture.append('Texture "text" "spectrum" "dots"\n')
+def textureDots1D(texture,name,u,v,inside,outside):
+    texture.append('Texture "{}" "spectrum" "dots"\n'.format(name))
     texture.append('		"float uscale" [{}] "float vscale" [{}]\n'.format(u,v))
     texture.append('	   "rgb inside" [{} {} {}] "rgb outside" [{} {} {}]\n'.format(*inside,*outside))
-    texture.append('Material "{}"\n'.format(material))
-    texture.append('"texture Kd" "text"\n')
-    return texture
 
-def textureChecks(u,v,tex1,tex2,material='matte'):
-    texture = list()
-    texture.append('Texture "text" "spectrum" "checkerboard"\n')
+def textureChecks1D(texture,name,u,v,tex1,tex2):
+    texture.append('Texture "{}" "spectrum" "checkerboard"\n'.format(name))
     texture.append('		"float uscale" [{}] "float vscale" [{}]\n'.format(u,v))
     texture.append('	   "rgb tex1" [{} {} {}] "rgb tex2" [{} {} {}]\n'.format(*tex1,*tex2))
-    texture.append('Material "{}"\n'.format(material))
-    texture.append('"texture Kd" "text"\n')
-    return texture
 
-#uv/color2 ignored for the interface
-def textureColor(u,v,color,color2,material='matte'):
-    texture = list()
-    texture.append("	Material \"{}\"\n".format(material))
-    texture.append("	\"rgb Kd\" [ {} {} {} ]\n".format(*color))
-    return texture
+#Use checkerboard to create solid color by setting colors equal
+def textureColor1D(texture,name,u,v,color1,color2):
+    color2 = color1
+    texture.append('Texture "{}" "spectrum" "checkerboard"\n'.format(name))
+    texture.append('		"float uscale" [{}] "float vscale" [{}]\n'.format(u,v))
+    texture.append('	   "rgb tex1" [{} {} {}] "rgb tex2" [{} {} {}]\n'.format(*color1,*color2))
 
-def texture(color1=None,color2=None):
+#Textures with 1-2 colors
+def texture1D(texture,name,UV=[4,8,16,32,64],color1=None,color2=None):
     if not color1:
         color1 = ( rand.random(), rand.random(), rand.random() )
     if not color2:
         color2 = ( rand.random(), rand.random(), rand.random() )
+    
+    textFunc = rand.choice([textureDots1D,textureChecks1D,textureColor1D])
+    uv = rand.choice(UV)
+    return textFunc(texture,name,uv,uv,color1,color2)
+
+def textureDots2D(texture,name,u,v,tex1,tex2):
+    texture.append('Texture "{}" "spectrum" "dots"\n'.format(name))
+    texture.append('		"float uscale" [{}] "float vscale" [{}]\n'.format(u,v))
+    texture.append('	   "texture inside" "{}" "texture outside" "{}"\n'.format(tex1,tex2))
+
+def textureChecks2D(texture,name,u,v,tex1,tex2):
+    texture.append('Texture "{}" "spectrum" "checkerboard"\n'.format(name))
+    texture.append('		"float uscale" [{}] "float vscale" [{}]\n'.format(u,v))
+    texture.append('	   "texture tex1" "{}" "texture tex2" "{}"\n'.format(tex1,tex2))
+
+def texureScale2D(texture,name,u,v,tex1,tex2):
+    texture.append('Texture "{}" "spectrum" "scale"\n'.format(name))
+    texture.append('	   "texture tex1" "{}" "texture tex2" "{}"\n'.format(tex1,tex2))
+
+def textureMix2D(texture,name,u,v,tex1,tex2):
+    texture.append('Texture "{}" "spectrum" "mix"\n'.format(name))
+    texture.append('	   "texture tex1" "{}"  "texture tex2" "{}"\n'.format(tex1,tex2))
+
+#Returns a 2D texture
+def texture2D(texture,name,tex1,tex2,UV=[4,8,16,32,64]):
+    
+    textFunc = rand.choice([textureDots2D,textureChecks2D,texureScale2D,textureMix2D])
+    uv = rand.choice(UV)
+    textFunc(texture,name,uv,uv,tex1,tex2)
+
+
+#Multi-dimentional texture
+def textureMultiD(texture,name,depth=2,UV=[4,8,16,32,64]):
+    if depth < 1:
+        depth = 1
+    
+    if depth == 1:
+        texture1D(texture,name,UV)
+    else:
+        name1 = name+'_d{}b1'.format(depth)
+        textureMultiD(texture,name1,(depth-1),UV)
+        name2 = name+'_d{}b2'.format(depth)
+        textureMultiD(texture,name2,(depth-1),UV)
+        texture2D(texture,name,name1,name2,UV)
+
+def texture(T=[2,3,4,5],UV=[4,8,16,32,64]):
+    tex = list()
+    name = 'text'
+    depth = rand.choice(T)
+    textureMultiD(tex,name,depth,UV)
+    
     material = rand.choice(['matte','plastic'])
-    textFunc = rand.choice([textureDots,textureChecks,textureColor])
-    uv = rand.choice([4,8,16,32,64])
-    return textFunc(uv,uv,color1,color2,material)
+    
+    tex.append('Material "{}"\n'.format(material))
+    tex.append('"texture Kd" "{}"\n'.format(name))
+
+    return tex
 
 def addBall(lines,b,p,s,texture):
     #print("Ball {} has coordinate {}  and size {}".format(b,p,s))
@@ -115,21 +161,20 @@ def integratorPreamble(i_lines):
     i_lines.append("#############################################\n")
     i_lines.append("WorldBegin\n\n")
 
-def addSharedWorld(s_lines):
-    s_lines.append("\
-#floor \n\
-AttributeBegin \n\
-    Material \"matte\" \n\
-        \"rgb Kd\" [ 0.40000001 0.41999999 0.47999999 ] \n\
-    Shape \"trianglemesh\" \"point P\" [ -1 0 -1 1 0 -1 1 0 1 -1 0 1 ] \n\
-	\"integer indices\" [ 0 1 2 2 3 0] \n\
-AttributeEnd \n\
-\n\
-#spotlight \n\
-AttributeBegin \n\
-CoordSysTransform \"camera\" \n\
-LightSource \"point\" \"color I\" [ .01 .01 .01 ] \n\
-AttributeEnd\n\n")
+def addFloor(f_lines,texture):
+    f_lines.append('#floor \n')
+    f_lines.append('AttributeBegin \n')
+    [f_lines.append(t) for t in texture]
+    f_lines.append('    Shape \"trianglemesh\" \"point P\" [ -1 0 -1 1 0 -1 1 0 1 -1 0 1 ] \n')
+    f_lines.append('	\"integer indices\" [ 0 1 2 2 3 0] \n')
+    f_lines.append('AttributeEnd \n\n')
+
+def addSpotlight(s_lines):
+    s_lines.append('#spotlight \n')
+    s_lines.append('AttributeBegin \n')
+    s_lines.append('CoordSysTransform \"camera\" \n')
+    s_lines.append('LightSource \"point\" \"color I\" [ .01 .01 .01 ] \n')
+    s_lines.append('AttributeEnd\n\n')
 
 
 parser = argparse.ArgumentParser()
@@ -151,6 +196,7 @@ parser.add_argument('-LZ',"--Light_Z_Range",nargs=3,help="Z range for lights (st
 #parser.add_argument("--Light_Sizes",nargs='+',help="Sizes for lights s1 s2 s3...",type=float, default=(.025, .05, .1))
 parser.add_argument('-Sh',"--Shape",help="Shape mode: Ball Cube Both", default="both")
 parser.add_argument('-rot',"--rotate",nargs=4,help="angle x-axis y-axis z-axis (in degrees 1/0 1/0 1/0", default=(360,1,0,0))
+parser.add_argument('-t',"--texture_depths",nargs='+',help="Depths d1 d2 d3...",type=float, default=(1, 2, 3, 4, 5))
 args = parser.parse_args()
 
 outpath = args.outpath
@@ -166,6 +212,7 @@ seed = args.random_seed
 rand.seed(seed)
 
 S = args.Sizes
+T = args.texture_depths
 
 (X_Start, X_End, X_Step) = args.X_Range
 (Y_Start, Y_End, Y_Step) = args.Y_Range
@@ -194,11 +241,10 @@ nLA = args.nLight_Arrangements
 depthmap_samples = 32
 depth_lines = list()
 depthPreamble(depth_lines)
-addSharedWorld(depth_lines)
 
 integrator_lines = list()
 integratorPreamble(integrator_lines)
-addSharedWorld(integrator_lines)
+addSpotlight(integrator_lines)
 
 up_samples = args.up_samples
 down_samples = args.down_samples
@@ -211,8 +257,6 @@ if(shape_mode != 'ball' and shape_mode != 'cube' and shape_mode != 'both'):
     parser.print_usage()
     exit(-1)
 
-textures = ["checkerboard","dots"]
-
 fileList = list()
 #For number of balls in scene
 for nBalls in nBalls_List:
@@ -224,13 +268,16 @@ for nBalls in nBalls_List:
         P = list(P_)
         #Empty List of Balls for this Configuration
         config = list()
+        #create floor as ball config
+        text = texture(T=T,UV=[64,128,256])
+        addFloor(config,text)
         for b in range(nBalls):
             rand.shuffle(P)
             p = P.pop()
             s = rand.choice(S)
             #Balls.append((p,s))
             #addBall(config,b,p,s)
-            text = texture()
+            text = texture(T=T)
             if shape_mode == 'ball':
                 addBall(config,b,p,s,text)
             elif shape_mode == 'cube':
@@ -243,6 +290,7 @@ for nBalls in nBalls_List:
     #Now that I have a config saved, create depth map scenes each
     for (c,ball_config) in enumerate(BallConfigs):
         file_name = "{}B_C{}_depth.pbrt".format(nBalls,c)
+        print("Adding File {}".format(file_name))
         fileList.append(file_name+"\n")
         fo = open(outpath+file_name+".pbrt","w")
 
@@ -253,7 +301,7 @@ for nBalls in nBalls_List:
         fo.close()
      
     #Now create the Area light configs for each ball config
-    for ball_config in BallConfigs:
+    for (b,ball_config) in enumerate(BallConfigs):
         for nLights in nLights_List:
             #nA = int(nLA / nLights)
             LightConfigs = list()
@@ -275,32 +323,33 @@ for nBalls in nBalls_List:
 
                 fo.close()
 
-            for (b,ball_config) in enumerate(BallConfigs):
-                for (l,light_config) in enumerate(LightConfigs):
-                    #create pbrt file for ground truth
-                    file_name = "{}B_C{}_{}L_C{}_truth".format(nBalls,b,nLights,l)
+            for (l,light_config) in enumerate(LightConfigs):
+                #create pbrt file for ground truth
+                file_name = "{}B_C{}_{}L_C{}_truth".format(nBalls,b,nLights,l)
             
-                    fo = open(outpath+file_name+".pbrt","w")
-                    fo.writelines(base_lines)
-                    fo.write(up_line)
-                    fo.writelines(integrator_lines)
-                    fo.writelines(ball_config)
-                    fo.writelines(light_config)
-                    fo.write("WorldEnd\n")
-                    fo.close()
-                    fileList.append(file_name+"\n")
+                fo = open(outpath+file_name+".pbrt","w")
+                fo.writelines(base_lines)
+                fo.write(up_line)
+                fo.writelines(integrator_lines)
+                fo.writelines(ball_config)
+                fo.writelines(light_config)
+                fo.write("WorldEnd\n")
+                fo.close()
+                print("[{}][{}]Adding File {}".format(b,l,file_name))
+                fileList.append(file_name+"\n")
 
-                    #create pbrt file for input image
-                    file_name = "{}B_C{}_{}L_C{}_input".format(nBalls,b,nLights,l)
-                    fo = open(outpath+file_name+".pbrt","w")
-                    fo.writelines(base_lines)
-                    fo.write(down_line)
-                    fo.writelines(integrator_lines)
-                    fo.writelines(ball_config)
-                    fo.writelines(light_config)
-                    fo.write("WorldEnd\n")
-                    fo.close()
-                    fileList.append(file_name+"\n")
+                #create pbrt file for input image
+                file_name = "{}B_C{}_{}L_C{}_input".format(nBalls,b,nLights,l)
+                fo = open(outpath+file_name+".pbrt","w")
+                fo.writelines(base_lines)
+                fo.write(down_line)
+                fo.writelines(integrator_lines)
+                fo.writelines(ball_config)
+                fo.writelines(light_config)
+                fo.write("WorldEnd\n")
+                fo.close()
+                print("[{}][{}]Adding File {}".format(b,l,file_name))
+                fileList.append(file_name+"\n")
 
 fo = open(outlistfile,"w")
 

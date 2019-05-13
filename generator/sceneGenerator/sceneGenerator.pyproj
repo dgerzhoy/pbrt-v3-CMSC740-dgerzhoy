@@ -12,7 +12,7 @@
     <Name>sceneGenerator</Name>
     <RootNamespace>sceneGenerator</RootNamespace>
     <LaunchProvider>Standard Python launcher</LaunchProvider>
-    <CommandLineArguments>C:\Users\danie\Documents\CMSC740\pbrt-v3\scenes\generated\baseline.pbrt C:\Users\danie\Documents\CMSC740\pbrt-v3\scenes\generated\out1\ C:\Users\danie\Documents\CMSC740\pbrt-v3\scenes\generated\out1\list.txt -nB 3 -nBA 1 -nL 1 2 -nLA 1</CommandLineArguments>
+    <CommandLineArguments>C:\Users\danie\Documents\CMSC740\pbrt-v3\generator\sceneGenerator\example -nB 4 -nBA 1 -nL 1 -nLA 1 -u 8</CommandLineArguments>
     <EnableNativeCodeDebugging>False</EnableNativeCodeDebugging>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
