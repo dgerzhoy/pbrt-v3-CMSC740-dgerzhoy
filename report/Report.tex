@@ -1,0 +1,47 @@
+\documentclass[acmsmall]{acmart}
+
+
+\begin{document}
+\title{Denoising Shadows Using Image-to-Image Translation Networks}
+
+\author{Daniel Gerzhoy}
+\author{Justin Shen}
+\maketitle
+
+\section{Introduction}
+\label{sec:intro}
+
+This work reports the work done and results achieved for the final project in CMSC740: Advanced Computer Graphics. We were tasked with using image-to-image translation to add rendering effects, specifically creating low-noise shadows from images rendered with noisy shadows from area lights.
+
+\section{Background}
+\label{sec:background}
+
+Background Section
+
+\section{Data Generation}
+\label{sec:datagen}
+
+We began collecting scenes to generate data by looking at the pbrt-v3-scenes repository~\cite{scenes}. We chose a few simple scenes containing area lights to begin with, to extract multiple data points from one scene quickly and automatically, we created a script that would rotate the lights in the scene around an axis. The intuition for this was that with lights coming at the object from different positions, the network would learn different shadows can come from the same shape.
+
+\section{Training}
+\label{sec:train}
+
+Training Section
+
+\section{Results}
+\label{sec:results}
+
+Results Section
+
+\section{Future Work}
+\label{sec:future}
+
+Future Work Section
+
+\section{Conclusion}
+\label{sec:conclusion}
+
+\bibliographystyle{unsrt}
+\bibliography{mybib}
+
+\end{document}
