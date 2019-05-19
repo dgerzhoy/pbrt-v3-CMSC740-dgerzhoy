@@ -3,6 +3,7 @@
 \usepackage{caption}
 \usepackage{subcaption}
 \usepackage{cleveref}
+\usepackage{appendix}
 
 \captionsetup[subfigure]{subrefformat=simple,labelformat=simple}
 \renewcommand\thesubfigure{(\alph{subfigure})}
@@ -196,10 +197,23 @@ Result incorporating depth map into the network in comparison to the same input 
 \section{Future Work}
 \label{sec:future}
 
-Future Work Section
+Two possible pathway for future work could come in the areas of additional data provided by the renderer for each scene or automatic scene generation for more training data.
+
+Additional data could come in the form of information about where the lights lie relative to the rest of the scene, or else voxel grids describing the entire scene and not just a depth map of the objects casting shadows. This would provide the network with information about where the shadows should be cast, perhaps improving the color and texture properties of the resultant images.
+
+Generating more complex scenes in random patterns with the generator could help generalize the things learned from automatically generated scene to more complex scenes. If many more smaller shapes were to be generated in each generated scene, analogous to the pieces of a Riemann sum, the final result would be a more realistic understanding of how shapes cast shadows.
 
 \section{Conclusion}
 \label{sec:conclusion}
+
+We have experimented with Denoising Shadows using an Image-to-Image translation network, trained with automatically generated data. We began with simple generated scenes, that did not provide enough variation in color, or texture to generalize to real more complex scenes. We then added these features and observed improvements to color retention.
+
+We added a depth map channel to the network and observed minimal improvement to the final output of the network.
+
+\appendix
+\appendixpage
+\section{Depth Map Renderer}
+\section{Scene Generator}
 
 \bibliographystyle{unsrt}
 \bibliography{mybib}

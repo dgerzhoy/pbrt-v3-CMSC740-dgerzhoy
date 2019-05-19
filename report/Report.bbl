@@ -1,5 +1,10 @@
 \begin{thebibliography}{1}
 
+\bibitem{DBLP:journals/corr/IsolaZZE16}
+Phillip Isola, Jun{-}Yan Zhu, Tinghui Zhou, and Alexei~A. Efros.
+\newblock Image-to-image translation with conditional adversarial networks.
+\newblock {\em CoRR}, abs/1611.07004, 2016.
+
 \bibitem{scenes}
 Humphreys Pharr, Jakob.
 \newblock Scenes for pbrt-v3, 2016.
