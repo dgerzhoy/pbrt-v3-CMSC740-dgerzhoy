@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7000 64-bit) (preloaded format=pdflatex 2019.5.15)  19 MAY 2019 14:42
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7000 64-bit) (preloaded format=pdflatex 2019.5.15)  19 MAY 2019 16:30
 entering extended mode
 **./Report.tex
 (Report.tex
@@ -1115,14 +1115,14 @@ LaTeX Font Info:    Font shape `T1/LinuxBiolinumT-TLF/m/n' will be
 (Font)              scaled to size 10.0pt on input line 19.
 LaTeX Font Info:    Font shape `T1/LinuxBiolinumT-TLF/b/n' will be
 (Font)              scaled to size 10.0pt on input line 19.
-<images/lowresshadow.png, id=81, 256.96pt x 256.96pt>
+<images/lowresshadow.png, id=85, 256.96pt x 256.96pt>
 File: images/lowresshadow.png Graphic file (type png)
 <use images/lowresshadow.png>
 Package pdftex.def Info: images/lowresshadow.png  used on input line 33.
 (pdftex.def)             Requested size: 98.95561pt x 98.95538pt.
 LaTeX Font Info:    Font shape `T1/LinuxBiolinumT-TLF/m/n' will be
 (Font)              scaled to size 9.0pt on input line 33.
-<images/highresshadow.png, id=82, 256.96pt x 256.96pt>
+<images/highresshadow.png, id=86, 256.96pt x 256.96pt>
 File: images/highresshadow.png Graphic file (type png)
 <use images/highresshadow.png>
 Package pdftex.def Info: images/highresshadow.png  used on input line 36.
@@ -1135,24 +1135,24 @@ LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/m/it' will be
 LaTeX Font Info:    Font shape `T1/LinuxBiolinumT-TLF/m/n' will be
 (Font)              scaled to size 8.0pt on input line 71.
  [2.2 <./images/lowresshadow.png> <./images/highresshadow.png (PNG copy)>]
-<images/gen1.png, id=120, 256.96pt x 256.96pt>
+<images/gen1.png, id=124, 256.96pt x 256.96pt>
 File: images/gen1.png Graphic file (type png)
 <use images/gen1.png>
 Package pdftex.def Info: images/gen1.png  used on input line 79.
 (pdftex.def)             Requested size: 98.95561pt x 98.95538pt.
-<images/gen2.png, id=121, 256.96pt x 256.96pt>
+<images/gen2.png, id=125, 256.96pt x 256.96pt>
 File: images/gen2.png Graphic file (type png)
 <use images/gen2.png>
 Package pdftex.def Info: images/gen2.png  used on input line 82.
 (pdftex.def)             Requested size: 98.95561pt x 98.95538pt.
-<images/gen1_depth.png, id=122, 256.96pt x 256.96pt>
+<images/gen1_depth.png, id=126, 256.96pt x 256.96pt>
 File: images/gen1_depth.png Graphic file (type png)
 <use images/gen1_depth.png>
 Package pdftex.def Info: images/gen1_depth.png  used on input line 85.
 (pdftex.def)             Requested size: 98.95561pt x 98.95538pt.
  [3.3 <./images/gen1.png (PNG copy)> <./images/gen2.png (PNG copy)> <./images/g
 en1_depth.png>]
-<images/preliminary.png, id=135, 792.9625pt x 278.03876pt>
+<images/preliminary.png, id=139, 792.9625pt x 278.03876pt>
 File: images/preliminary.png Graphic file (type png)
 <use images/preliminary.png>
 Package pdftex.def Info: images/preliminary.png  used on input line 115.
@@ -1164,7 +1164,7 @@ Class acmart Warning: A possible image without description on input line 118.
 [4.4 <./images/preliminary.png>]
 LaTeX Font Info:    Font shape `T1/LinuxBiolinumT-TLF/m/it' will be
 (Font)              scaled to size 10.0pt on input line 128.
-<images/experiment1.png, id=147, 807.015pt x 282.05376pt>
+<images/experiment1.png, id=151, 807.015pt x 282.05376pt>
 File: images/experiment1.png Graphic file (type png)
 <use images/experiment1.png>
 Package pdftex.def Info: images/experiment1.png  used on input line 131.
@@ -1173,7 +1173,7 @@ Package pdftex.def Info: images/experiment1.png  used on input line 131.
 
 Class acmart Warning: A possible image without description on input line 134.
 
-<images/experiment2.png, id=148, 792.9625pt x 283.0575pt>
+<images/experiment2.png, id=152, 792.9625pt x 283.0575pt>
 File: images/experiment2.png Graphic file (type png)
 <use images/experiment2.png>
 Package pdftex.def Info: images/experiment2.png  used on input line 142.
@@ -1181,7 +1181,7 @@ Package pdftex.def Info: images/experiment2.png  used on input line 142.
 
 Class acmart Warning: A possible image without description on input line 145.
 
-<images/experiment3.png, id=149, 788.9475pt x 286.06876pt>
+<images/experiment3.png, id=153, 788.9475pt x 286.06876pt>
 File: images/experiment3.png Graphic file (type png)
 <use images/experiment3.png>
 Package pdftex.def Info: images/experiment3.png  used on input line 148.
@@ -1189,24 +1189,18 @@ Package pdftex.def Info: images/experiment3.png  used on input line 148.
 
 Class acmart Warning: A possible image without description on input line 151.
 
-<images/experiment4.png, id=150, 790.955pt x 287.0725pt>
+[5.5 <./images/experiment1.png> <./images/experiment2.png>]
+<images/experiment4.png, id=165, 790.955pt x 287.0725pt>
 File: images/experiment4.png Graphic file (type png)
 <use images/experiment4.png>
 Package pdftex.def Info: images/experiment4.png  used on input line 159.
 (pdftex.def)             Requested size: 395.8225pt x 143.66292pt.
 
+
 Class acmart Warning: A possible image without description on input line 162.
 
-<images/experiment5.png, id=151, 786.94pt x 281.05pt>
-File: images/experiment5.png Graphic file (type png)
-<use images/experiment5.png>
-Package pdftex.def Info: images/experiment5.png  used on input line 165.
-(pdftex.def)             Requested size: 395.8225pt x 141.36519pt.
-
-Class acmart Warning: A possible image without description on input line 168.
-
-[5.5 <./images/experiment1.png> <./images/experiment2.png>]
-<images/with-depth.png, id=162, 789.95125pt x 286.06876pt>
+[6.6 <./images/experiment3.png> <./images/experiment4.png>]
+<images/with-depth.png, id=175, 789.95125pt x 286.06876pt>
 File: images/with-depth.png Graphic file (type png)
 <use images/with-depth.png>
 Package pdftex.def Info: images/with-depth.png  used on input line 178.
@@ -1215,7 +1209,7 @@ Package pdftex.def Info: images/with-depth.png  used on input line 178.
 
 Class acmart Warning: A possible image without description on input line 181.
 
-<images/no-depth.png, id=163, 790.955pt x 286.06876pt>
+<images/no-depth.png, id=176, 790.955pt x 286.06876pt>
 File: images/no-depth.png Graphic file (type png)
 <use images/no-depth.png>
 Package pdftex.def Info: images/no-depth.png  used on input line 184.
@@ -1225,33 +1219,25 @@ Package caption Warning: \label without proper reference on input line 179.
 See the caption package documentation for explanation.
 
 
-LaTeX Warning: Reference `figDepth' on page 6 undefined on input line 186.
+LaTeX Warning: Reference `figDepth' on page 7 undefined on input line 186.
 
 
 Package caption Warning: \label without proper reference on input line 179.
 See the caption package documentation for explanation.
 
 
-LaTeX Warning: Reference `figDepth' on page 6 undefined on input line 186.
+LaTeX Warning: Reference `figDepth' on page 7 undefined on input line 186.
 
 
 Class acmart Warning: A possible image without description on input line 187.
 
-[6.6 <./images/experiment3.png> <./images/experiment4.png>] [7.7 <./images/expe
-riment5.png> <./images/with-depth.png>]
+[7.7 <./images/with-depth.png> <./images/no-depth.png>]
 LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/m/n' will be
 (Font)              scaled to size 17.28pt on input line 214.
 LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/b/n' will be
 (Font)              scaled to size 17.28pt on input line 214.
 
-Overfull \hbox (85.39586pt too wide) in paragraph at lines 215--216
-\T1/LinuxLibertineT-TLF/m/n/10 (-20) Our changes to the PBRT ren-der, and scene
- gen-er-a-tor can be found in this git repos-i-tory: https://github.com/dgerzho
-y/pbrt-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 223--225
+Underfull \hbox (badness 10000) in paragraph at lines 227--229
 \T1/LinuxLibertineT-TLF/m/n/10 (+20) The scene gen-er-a-tor is lo-cated at pbrt
 -v3/generator/sceneGenerator/sceneGenerator.py
  []
@@ -1259,29 +1245,32 @@ Underfull \hbox (badness 10000) in paragraph at lines 223--225
 (Report.bbl
 LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/m/it' will be
 (Font)              scaled to size 8.0pt on input line 6.
-)
+
+Underfull \vbox (badness 4981) has occurred while \output is active []
+
+ [8.8])
 
 Class acmart Warning: Some images may lack descriptions.
 
-[8.8 <./images/no-depth.png>]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 229.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 229.
+[9.9]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 237.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 237.
  (Report.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 229.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 229.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 237.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 237.
 Package rerunfilecheck Info: File `Report.out' has not changed.
-(rerunfilecheck)             Checksum: C843FD4D06966A66E884F5751DFC6BCF;2744.
+(rerunfilecheck)             Checksum: 64002C139FF71AA8EE9884CD3ED2293E;3035.
 
 
 LaTeX Warning: There were undefined references.
 
  ) 
 Here is how much of TeX's memory you used:
- 19973 strings out of 492895
- 313784 string characters out of 3133479
+ 19971 strings out of 492895
+ 313733 string characters out of 3133479
  450821 words of memory out of 3000000
- 23065 multiletter control sequences out of 15000+200000
- 160817 words of font info for 280 fonts, out of 3000000 for 9000
+ 23060 multiletter control sequences out of 15000+200000
+ 160963 words of font info for 282 fonts, out of 3000000 for 9000
  1302 hyphenation exceptions out of 8191
  60i,12n,94p,1038b,707s stack positions out of 5000i,500n,10000p,200000b,50000s
 {C:/Program Files/MiKTeX 2.9/fonts/enc/dvips/libertine/lbtn_25tcsq.enc}{C:/Pr
@@ -1303,9 +1292,9 @@ ype1/public/newtx/rtxmi7.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/tx
 fonts/rtxr.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/txfonts/txsyb.pf
 b><C:/Program Files/MiKTeX 2.9/fonts/type1/public/newtx/txsys.pfb><C:/Program F
 iles/MiKTeX 2.9/fonts/type1/public/newtx/zxlri.pfb>
-Output written on Report.pdf (8 pages, 3269654 bytes).
+Output written on Report.pdf (9 pages, 3101099 bytes).
 PDF statistics:
- 272 PDF objects out of 1000 (max. 8388607)
- 45 named destinations out of 1000 (max. 500000)
- 54494 words of extra memory for PDF output out of 61914 (max. 10000000)
+ 281 PDF objects out of 1000 (max. 8388607)
+ 46 named destinations out of 1000 (max. 500000)
+ 54497 words of extra memory for PDF output out of 61914 (max. 10000000)
 
