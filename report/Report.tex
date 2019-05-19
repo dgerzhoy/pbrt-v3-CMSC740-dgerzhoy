@@ -212,8 +212,16 @@ We added a depth map channel to the network and observed minimal improvement to 
 
 \appendix
 \appendixpage
+Our changes to the PBRT render, and scene generator can be found in this git repository: https://github.com/dgerzhoy/pbrt-v3-CMSC740-dgerzhoy.git
+
 \section{Depth Map Renderer}
-\section{Scene Generator}
+
+The integrator created in the renderer is contained in depthmap.h and depthmap.cpp in /pbrt-v3/src/integrators
+
+\section{Scene Generator and Rotator}
+
+The scene generator is located at pbrt-v3/generator/sceneGenerator/sceneGenerator.py
+\linebreak The rotator script is located at /pbrt-v3/rotator/rotate.py
 
 \bibliographystyle{unsrt}
 \bibliography{mybib}
